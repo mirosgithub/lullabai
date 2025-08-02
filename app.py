@@ -188,8 +188,7 @@ def text_to_speech():
         # Configure voice
         voice = texttospeech.VoiceSelectionParams(
             language_code="en-US",
-            name="en-US-Standard-A",
-            ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
+            name="en-US-Chirp3-HD-Laomedeia"
         )
         
         # Configure audio
