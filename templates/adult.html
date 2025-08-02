@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adult Bedtime Stories - Bedtime Story Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <header class="page-header">
+      <a href="/" class="back-btn">← Back</a>
+      <h1>🌿 Adult Bedtime Stories</h1>
+    </header>
+
+    <main class="adult-container">
+      <div class="story-generator">
+        <h2>Create Your Soothing Story</h2>
+        <p>Let us craft a therapeutic bedtime story tailored to help you find peace and sleep</p>
+
+        <div class="name-section">
+          <h3>What's your name?</h3>
+          <div class="input-group">
+            <input type="text" id="adultName" placeholder="Enter your name..." maxlength="30">
+          </div>
+          <p class="name-hint">Your name will be woven into the story for a personal touch 🌟</p>
+        </div>
+
+        <div class="sleep-issues-section">
+          <h3>Tell me why you can't sleep</h3>
+          <p>Choose from common issues or describe your specific situation</p>
+
+          <div class="sleep-options">
+            <button class="sleep-option" data-issue="stress"> Stress & Anxiety</button>
+            <button class="sleep-option" data-issue="work">💼 Work Pressure</button>
+            <button class="sleep-option" data-issue="loneliness"> Loneliness</button>
+            <button class="sleep-option" data-issue="grief">💔 Grief & Loss</button>
+            <button class="sleep-option" data-issue="overthinking">🤔 Overthinking</button>
+            <button class="sleep-option" data-issue="pain">😣 Physical Pain</button>
+            <button class="sleep-option" data-issue="change">🔄 Life Changes</button>
+            <button class="sleep-option" data-issue="general"> General Insomnia</button>
+          </div>
+
+          <div class="custom-sleep-reason">
+            <h4>Or describe your specific situation</h4>
+            <div class="input-group">
+              <textarea id="customSleepReason"
+                placeholder="Tell us more about what's keeping you awake... (e.g., 'I'm worried about my upcoming job interview and keep replaying scenarios in my mind')"
+                rows="3" maxlength="300"></textarea>
+              <button id="addCustomSleepReason" class="btn btn-small">Add My Reason</button>
+            </div>
+            <p class="reason-hint">This will help us create a more targeted therapeutic story for your specific
+              situation 🌙</p>
+          </div>
+        </div>
+
+        <div class="nostalgia-section">
+          <h3>Childhood Memories (Optional)</h3>
+          <p>Select elements that bring you comfort and nostalgia</p>
+          <div class="nostalgia-chips">
+            <button class="nostalgia-chip" data-memory="grandparents">👴👵 Grandparents</button>
+            <button class="nostalgia-chip" data-memory="summer">☀️ Summer Days</button>
+            <button class="nostalgia-chip" data-memory="rain">🌧️ Rainy Days</button>
+            <button class="nostalgia-chip" data-memory="books">📚 Bedtime Books</button>
+            <button class="nostalgia-chip" data-memory="lullabies">🎵 Lullabies</button>
+            <button class="nostalgia-chip" data-memory="blanket">️ Comfort Blanket</button>
+            <button class="nostalgia-chip" data-memory="stories"> Story Time</button>
+            <button class="nostalgia-chip" data-memory="nature">🌳 Nature Walks</button>
+            <button class="nostalgia-chip" data-memory="family">👨‍👩‍👧‍👦 Family Time</button>
+            <button class="nostalgia-chip" data-memory="pets">🐕 Beloved Pets</button>
+            <button class="nostalgia-chip" data-memory="home">🏠 Childhood Home</button>
+            <button class="nostalgia-chip" data-memory="friends">👥 Childhood Friends</button>
+          </div>
+        </div>
+
+        <div class="custom-memory-section">
+          <h3>Or Share a Specific Memory</h3>
+          <p>Tell us about a special moment from your childhood that brings you comfort</p>
+          <div class="input-group">
+            <textarea id="customMemory"
+              placeholder="Describe a comforting childhood memory... (e.g., 'My grandmother used to read me stories while I sat on her lap, and she always smelled like lavender')"
+              rows="3" maxlength="300"></textarea>
+            <button id="addCustomMemory" class="btn btn-small">Add Memory</button>
+          </div>
+          <p class="memory-hint">This will be woven into your story to make it even more personal and comforting 🌸</p>
+        </div>
+
+        <div class="selected-elements">
+          <h3>Your Story Elements</h3>
+          <div id="selectedElements" class="selected-chips">
+            <p class="empty-message">No elements selected yet</p>
+          </div>
+        </div>
+
+        <button id="generateAdultStory" class="btn btn-primary" disabled>
+          Create My Soothing Story
+        </button>
+      </div>
+
+      <div id="storyResult" class="story-result" style="display: none;">
+        <h2>Your Therapeutic Bedtime Story</h2>
+        <div id="storyContent" class="story-content">
+          <!-- Generated story will appear here -->
+        </div>
+      </div>
+
+      <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Creating your soothing story...</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/adult.js') }}"></script>
+</body>
+
+</html>

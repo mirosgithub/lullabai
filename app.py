@@ -55,6 +55,11 @@ def personalised():
     """Personalised story generation page"""
     return render_template('personalised.html')
 
+@app.route('/adult')
+def adult():
+    """Adult bedtime stories page"""
+    return render_template('adult.html')
+
 @app.route('/api/stories')
 def get_stories():
     """Fetch classic stories from Firebase (exclude generated stories)"""
@@ -208,6 +213,88 @@ def text_to_speech():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/generate-adult-story', methods=['POST'])
+def generate_adult_story():
+    """Generate therapeutic adult bedtime story using Gemini API"""
+    try:
+        data = request.get_json()
+        sleep_issue = data.get('sleepIssue', '')
+        custom_sleep_reason = data.get('customSleepReason', '')
+        memories = data.get('memories', [])
+        custom_memory = data.get('customMemory', '')
+        adult_name = data.get('adultName', '')
+        
+        if not sleep_issue and not custom_sleep_reason:
+            return jsonify({'error': 'No sleep issue provided'}), 400
+            
+        if not adult_name:
+            return jsonify({'error': 'Adult name is required'}), 400
+        
+        # Check if Gemini API key is configured
+        gemini_api_key = os.environ.get('GEMINI_API_KEY')
+        if not gemini_api_key or gemini_api_key == 'your_gemini_api_key_here':
+            return jsonify({'error': 'Gemini API key not configured. Please set GEMINI_API_KEY in your .env file.'}), 500
+        
+        # Determine the sleep issue to use
+        final_sleep_issue = custom_sleep_reason if custom_sleep_reason else sleep_issue
+        sleep_issue_display = custom_sleep_reason if custom_sleep_reason else sleep_issue.replace('_', ' ').title()
+        
+        # Create therapeutic prompt for Gemini
+        memory_text = ""
+        if memories:
+            memory_text += f" including these nostalgic elements: {', '.join(memories)}"
+        if custom_memory:
+            memory_text += f" and incorporate this personal memory: '{custom_memory}'"
+        
+        prompt = f"""Write a gentle, therapeutic bedtime story for an adult named {adult_name} who is struggling with: {final_sleep_issue}.
+        
+        Requirements:
+        - Keep it under 600 words
+        - Use soothing, calming language
+        - Include therapeutic elements that specifically address: {final_sleep_issue}
+        - Incorporate childhood nostalgia and comfort{memory_text}
+        - Make {adult_name} the central character
+        - Include gentle breathing or relaxation cues
+        - End with a sense of peace and safety
+        - Use warm, comforting imagery
+        - Avoid triggering content
+        - Make it suitable for falling asleep to
+        - Address the specific concerns mentioned in the sleep issue
+        
+        The story should feel like a loving parent reading to their child, but adapted for an adult's emotional needs.
+        Include elements that help the reader feel safe, loved, and ready for sleep."""
+        
+        # Generate story using Gemini
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
+        
+        if not response.text:
+            return jsonify({'error': 'No story generated. Please try again.'}), 500
+            
+        story_text = response.text
+        
+        # Create story object (temporary, not saved to Firebase)
+        story_data = {
+            'title': f"{adult_name}'s Soothing Story",
+            'content': story_text,
+            'sleep_issue': sleep_issue,
+            'custom_sleep_reason': custom_sleep_reason,
+            'sleep_issue_display': sleep_issue_display,
+            'memories': memories,
+            'custom_memory': custom_memory,
+            'adult_name': adult_name,
+            'timestamp': datetime.now().isoformat(),
+            'type': 'adult_generated',
+            'temporary': True  # Mark as temporary
+        }
+        
+        # Don't save to Firebase - return the story directly
+        return jsonify(story_data)
+        
+    except Exception as e:
+        print(f"Error generating adult story: {str(e)}")
+        return jsonify({'error': f'Story generation failed: {str(e)}'}), 500
 
 @app.route('/api/setup-classic-stories', methods=['POST'])
 def setup_classic_stories():

@@ -176,7 +176,7 @@ async function generateStory() {
     alert('Sorry, we couldn\'t generate your story. Please try again.');
   } finally {
     loading.style.display = 'none';
-    storyGenerator.style.display = 'block';
+    // Don't show the story generator here - let displayGeneratedStory handle it
   }
 }
 
@@ -184,6 +184,7 @@ async function generateStory() {
 function displayGeneratedStory(story) {
   const storyResult = document.getElementById('storyResult');
   const storyContent = document.getElementById('storyContent');
+  const storyGenerator = document.querySelector('.story-generator');
 
   const childName = story.child_name || 'Adventure';
 
@@ -207,6 +208,8 @@ function displayGeneratedStory(story) {
         </div>
     `;
 
+  // Hide the story generator and show only the story result
+  storyGenerator.style.display = 'none';
   storyResult.style.display = 'block';
 
   // Store the generated story in sessionStorage for persistence during session
@@ -338,8 +341,12 @@ function resetStoryGenerator() {
   // Update generate button
   updateGenerateButton();
 
-  // Hide story result
-  document.getElementById('storyResult').style.display = 'none';
+  // Hide story result and show story generator
+  const storyResult = document.getElementById('storyResult');
+  const storyGenerator = document.querySelector('.story-generator');
+
+  storyResult.style.display = 'none';
+  storyGenerator.style.display = 'block';
 
   // Clear the stored generated story
   sessionStorage.removeItem('currentGeneratedStory');
