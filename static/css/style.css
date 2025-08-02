@@ -252,6 +252,9 @@ body {
 /* Personalised story page */
 .personalised-container {
   flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .story-generator {
