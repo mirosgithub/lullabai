@@ -186,7 +186,7 @@ function displayGeneratedStory(story) {
   const storyContent = document.getElementById('storyContent');
   const storyGenerator = document.querySelector('.story-generator');
 
-  const childName = story.child_name || 'Adventure';
+  const childName = story.child_name || 'Anna';
 
   storyContent.innerHTML = `
         <h3>${story.title}</h3>
@@ -247,70 +247,90 @@ function setupStoryActions() {
   });
 }
 
-// Read story aloud using Web Speech API
-function readStoryAloud(text, readButton, pauseButton) {
+// Read story aloud using Google Cloud TTS API
+async function readStoryAloud(text, readButton, pauseButton) {
   if (!text) {
     alert('No text to read');
     return;
   }
 
-  if (window.speechSynthesis) {
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
+  try {
+    // Show loading state
+    readButton.textContent = '🔄 Generating...';
+    readButton.disabled = true;
+    pauseButton.style.display = 'none';
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8; // Slightly slower for bedtime stories
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
+    // Call Google Cloud TTS API
+    const response = await fetch('/api/tts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: text })
+    });
 
-    // Try to use a female voice for bedtime stories
-    const voices = window.speechSynthesis.getVoices();
-    const femaleVoice = voices.find(voice =>
-      voice.lang.includes('en') && voice.name.toLowerCase().includes('female')
-    );
-    if (femaleVoice) {
-      utterance.voice = femaleVoice;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to generate audio');
     }
 
-    window.speechSynthesis.speak(utterance);
+    const data = await response.json();
+
+    // Create audio element
+    const audio = new Audio(data.audio_url);
 
     // Show pause button, hide read button
     readButton.style.display = 'none';
     pauseButton.style.display = 'inline-block';
+    pauseButton.textContent = '⏸️ Pause';
 
-    utterance.onend = () => {
+    // Play audio
+    audio.play();
+
+    // Handle audio events
+    audio.onended = () => {
       // Show read button, hide pause button
       readButton.style.display = 'inline-block';
+      readButton.textContent = '🔊 Read Aloud';
+      readButton.disabled = false;
       pauseButton.style.display = 'none';
     };
 
-    utterance.onpause = () => {
+    audio.onpause = () => {
       pauseButton.textContent = '▶️ Resume';
-      pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
     };
 
-    utterance.onresume = () => {
+    audio.onplay = () => {
       pauseButton.textContent = '⏸️ Pause';
-      pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
     };
-  } else {
-    alert('Speech synthesis not supported in this browser');
+
+    // Store audio element for pause/resume functionality
+    window.currentAudio = audio;
+
+  } catch (error) {
+    console.error('TTS Error:', error);
+    alert(`Failed to generate audio: ${error.message}`);
+
+    // Reset button state
+    readButton.textContent = '🔊 Read Aloud';
+    readButton.disabled = false;
+    pauseButton.style.display = 'none';
   }
 }
 
-// Pause speech
+// Pause audio
 function pauseSpeech(readButton, pauseButton) {
-  if (window.speechSynthesis) {
-    window.speechSynthesis.pause();
+  if (window.currentAudio) {
+    window.currentAudio.pause();
     pauseButton.textContent = '▶️ Resume';
     pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
   }
 }
 
-// Resume speech
+// Resume audio
 function resumeSpeech(readButton, pauseButton) {
-  if (window.speechSynthesis) {
-    window.speechSynthesis.resume();
+  if (window.currentAudio) {
+    window.currentAudio.play();
     pauseButton.textContent = '⏸️ Pause';
     pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
   }
@@ -319,8 +339,9 @@ function resumeSpeech(readButton, pauseButton) {
 // Reset story generator
 function resetStoryGenerator() {
   // Stop any ongoing speech
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
+  if (window.currentAudio) {
+    window.currentAudio.pause();
+    window.currentAudio.src = ''; // Clear audio source
   }
 
   // Clear selected keywords
