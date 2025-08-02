@@ -284,6 +284,7 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
     // Create audio element and start playing immediately
     const audio = new Audio(data.audio_url);
     window.currentAudio = audio;
+    window.isUserPaused = false; // Track if user explicitly paused
 
     // Show pause button, hide read button
     readButton.style.display = 'none';
@@ -302,12 +303,17 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
       generateNextChunk(sentences.slice(2), readButton, pauseButton);
     };
 
+    // Only change button state if user explicitly paused
     audio.onpause = () => {
-      pauseButton.textContent = '▶️ Resume';
-      pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
+      if (window.isUserPaused) {
+        pauseButton.textContent = '▶️ Resume';
+        pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
+      }
     };
 
     audio.onplay = () => {
+      // Reset user pause flag when audio starts playing
+      window.isUserPaused = false;
       pauseButton.textContent = '⏸️ Pause';
       pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
     };
@@ -353,6 +359,21 @@ async function generateNextChunk(remainingSentences, readButton, pauseButton) {
       generateNextChunk(remainingSentences.slice(2), readButton, pauseButton);
     };
 
+    // Only change button state if user explicitly paused
+    audio.onpause = () => {
+      if (window.isUserPaused) {
+        pauseButton.textContent = '▶️ Resume';
+        pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
+      }
+    };
+
+    audio.onplay = () => {
+      // Reset user pause flag when audio starts playing
+      window.isUserPaused = false;
+      pauseButton.textContent = '⏸️ Pause';
+      pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
+    };
+
   } catch (error) {
     console.error('Error generating next chunk:', error);
   }
@@ -362,6 +383,7 @@ async function generateNextChunk(remainingSentences, readButton, pauseButton) {
 function pauseSpeech(readButton, pauseButton) {
   if (window.currentAudio) {
     window.currentAudio.pause();
+    window.isUserPaused = true; // Mark that user explicitly paused
     pauseButton.textContent = '▶️ Resume';
     pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
   }
@@ -371,6 +393,7 @@ function pauseSpeech(readButton, pauseButton) {
 function resumeSpeech(readButton, pauseButton) {
   if (window.currentAudio) {
     window.currentAudio.play();
+    window.isUserPaused = false; // Reset user pause flag
     pauseButton.textContent = '⏸️ Pause';
     pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
   }
