@@ -100,6 +100,32 @@ function setupModal() {
       closeStoryModal();
     }
   });
+
+  // Add event listeners for read and pause buttons using event delegation
+  modal.addEventListener('click', function (e) {
+    if (e.target.classList.contains('read-aloud-btn')) {
+      const storyContent = document.getElementById('storyContent');
+      const storyText = storyContent.querySelector('.story-text').textContent;
+      const readButton = e.target;
+      const pauseButton = storyContent.querySelector('.pause-btn');
+      readStoryAloud(storyText, readButton, pauseButton);
+    }
+  });
+
+  modal.addEventListener('click', function (e) {
+    if (e.target.classList.contains('pause-btn')) {
+      const storyContent = document.getElementById('storyContent');
+      const readButton = storyContent.querySelector('.read-aloud-btn');
+      const pauseButton = e.target;
+
+      // Check if we're paused or playing
+      if (pauseButton.textContent.includes('Resume')) {
+        resumeSpeech(readButton, pauseButton);
+      } else {
+        pauseSpeech(readButton, pauseButton);
+      }
+    }
+  });
 }
 
 // Open story modal
@@ -140,19 +166,17 @@ function displayStoryInModal(story) {
             ${story.content ? story.content.replace(/\n/g, '<br>') : 'No content available'}
         </div>
         <div class="story-actions">
-            <button class="btn btn-secondary" id="readAloudBtn">
+            <button class="btn btn-secondary read-aloud-btn">
                 🔊 Read to Me
+            </button>
+            <button class="btn btn-secondary pause-btn" style="display: none;">
+                ⏸️ Pause
             </button>
         </div>
     `;
 
-  // Add event listener for read aloud button
-  const readButton = storyContent.querySelector('#readAloudBtn');
-  if (readButton && story.content) {
-    readButton.addEventListener('click', () => {
-      readStoryAloud(story.content, readButton);
-    });
-  }
+  // Store the story content for later use
+  storyContent.dataset.storyContent = story.content;
 }
 
 // Close story modal
@@ -168,7 +192,7 @@ function closeStoryModal() {
 }
 
 // Read story aloud using Web Speech API
-function readStoryAloud(text, button) {
+function readStoryAloud(text, readButton, pauseButton) {
   if (!text) {
     alert('No text to read');
     return;
@@ -196,32 +220,23 @@ function readStoryAloud(text, button) {
     currentUtterance = utterance;
     window.speechSynthesis.speak(utterance);
 
-    // Update button text and set state
-    const originalText = button.textContent;
-    button.textContent = '⏸️ Pause';
-    button.dataset.state = 'playing';
-    button.dataset.originalText = originalText;
-
-    // Set the click handler to pause
-    button.onclick = () => pauseSpeech(button);
+    // Show pause button, hide read button
+    readButton.style.display = 'none';
+    pauseButton.style.display = 'inline-block';
 
     utterance.onend = () => {
-      button.textContent = originalText;
-      button.dataset.state = 'stopped';
-      button.onclick = () => readStoryAloud(text, button);
+      // Show read button, hide pause button
+      readButton.style.display = 'inline-block';
+      pauseButton.style.display = 'none';
       currentUtterance = null;
     };
 
     utterance.onpause = () => {
-      button.textContent = '▶️ Resume';
-      button.dataset.state = 'paused';
-      button.onclick = () => resumeSpeech(button);
+      pauseButton.textContent = '▶️ Resume';
     };
 
     utterance.onresume = () => {
-      button.textContent = '⏸️ Pause';
-      button.dataset.state = 'playing';
-      button.onclick = () => pauseSpeech(button);
+      pauseButton.textContent = '⏸️ Pause';
     };
   } else {
     alert('Speech synthesis not supported in this browser');
@@ -229,22 +244,18 @@ function readStoryAloud(text, button) {
 }
 
 // Pause speech
-function pauseSpeech(button) {
+function pauseSpeech(readButton, pauseButton) {
   if (window.speechSynthesis) {
     window.speechSynthesis.pause();
-    button.textContent = '▶️ Resume';
-    button.dataset.state = 'paused';
-    button.onclick = () => resumeSpeech(button);
+    pauseButton.textContent = '▶️ Resume';
   }
 }
 
 // Resume speech
-function resumeSpeech(button) {
+function resumeSpeech(readButton, pauseButton) {
   if (window.speechSynthesis) {
     window.speechSynthesis.resume();
-    button.textContent = '⏸️ Pause';
-    button.dataset.state = 'playing';
-    button.onclick = () => pauseSpeech(button);
+    pauseButton.textContent = '⏸️ Pause';
   }
 }
 
