@@ -227,7 +227,7 @@ function setupStoryActions() {
       const storyText = document.querySelector('.story-text').textContent;
       const readButton = e.target;
       const pauseButton = document.getElementById('pauseBtn');
-      readStoryAloud(storyText, readButton, pauseButton);
+      readStoryAloudStreaming(storyText, readButton, pauseButton);
     }
   });
 
@@ -247,8 +247,8 @@ function setupStoryActions() {
   });
 }
 
-// Read story aloud using Google Cloud TTS API
-async function readStoryAloud(text, readButton, pauseButton) {
+// Streaming TTS implementation
+async function readStoryAloudStreaming(text, readButton, pauseButton) {
   if (!text) {
     alert('No text to read');
     return;
@@ -260,61 +260,101 @@ async function readStoryAloud(text, readButton, pauseButton) {
     readButton.disabled = true;
     pauseButton.style.display = 'none';
 
-    // Call Google Cloud TTS API
+    // Split text into sentences for faster processing
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+
+    // Generate first chunk immediately
+    const firstChunk = sentences.slice(0, 2).join('. ') + '.';
+
+    // Start generating first chunk
     const response = await fetch('/api/tts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text: text })
+      body: JSON.stringify({ text: firstChunk })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to generate audio');
+      throw new Error('Failed to generate audio');
     }
 
     const data = await response.json();
 
-    // Create audio element
+    // Create audio element and start playing immediately
     const audio = new Audio(data.audio_url);
+    window.currentAudio = audio;
 
     // Show pause button, hide read button
     readButton.style.display = 'none';
     pauseButton.style.display = 'inline-block';
     pauseButton.textContent = '⏸️ Pause';
 
-    // Play audio
+    // Set up click handlers
+    pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
+
+    // Play first chunk immediately
     audio.play();
 
     // Handle audio events
     audio.onended = () => {
-      // Show read button, hide pause button
-      readButton.style.display = 'inline-block';
-      readButton.textContent = '🔊 Read Aloud';
-      readButton.disabled = false;
-      pauseButton.style.display = 'none';
+      // Generate next chunk while current is playing
+      generateNextChunk(sentences.slice(2), readButton, pauseButton);
     };
 
     audio.onpause = () => {
       pauseButton.textContent = '▶️ Resume';
+      pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
     };
 
     audio.onplay = () => {
       pauseButton.textContent = '⏸️ Pause';
+      pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
     };
-
-    // Store audio element for pause/resume functionality
-    window.currentAudio = audio;
 
   } catch (error) {
     console.error('TTS Error:', error);
     alert(`Failed to generate audio: ${error.message}`);
+    resetButtonState(readButton, pauseButton);
+  }
+}
 
-    // Reset button state
-    readButton.textContent = '🔊 Read Aloud';
-    readButton.disabled = false;
-    pauseButton.style.display = 'none';
+async function generateNextChunk(remainingSentences, readButton, pauseButton) {
+  if (remainingSentences.length === 0) {
+    // Story finished
+    resetButtonState(readButton, pauseButton);
+    return;
+  }
+
+  try {
+    const chunk = remainingSentences.slice(0, 2).join('. ') + '.';
+
+    const response = await fetch('/api/tts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: chunk })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to generate next chunk');
+    }
+
+    const data = await response.json();
+    const audio = new Audio(data.audio_url);
+
+    // Play next chunk
+    audio.play();
+    window.currentAudio = audio;
+
+    // Set up for next chunk
+    audio.onended = () => {
+      generateNextChunk(remainingSentences.slice(2), readButton, pauseButton);
+    };
+
+  } catch (error) {
+    console.error('Error generating next chunk:', error);
   }
 }
 
