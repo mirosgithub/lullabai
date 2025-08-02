@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalised Stories - Bedtime Story Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <header class="page-header">
+      <a href="/" class="back-btn">← Back</a>
+      <h1>✨ Personalised Stories</h1>
+    </header>
+
+    <main class="personalised-container">
+      <div class="story-generator">
+        <h2>Choose Your Story Elements</h2>
+        <p>Select keywords to create your unique bedtime story</p>
+
+        <div class="child-name-section">
+          <h3>What's your name?</h3>
+          <div class="input-group">
+            <input type="text" id="childName" placeholder="Enter your name..." maxlength="20">
+          </div>
+          <p class="name-hint">Your name will be the hero of the story! 🌟</p>
+        </div>
+
+        <div class="keywords-section">
+          <h3>Popular Keywords</h3>
+          <div class="keyword-chips">
+            <button class="keyword-chip" data-keyword="dragon">🐉 Dragon</button>
+            <button class="keyword-chip" data-keyword="princess">👸 Princess</button>
+            <button class="keyword-chip" data-keyword="knight">⚔️ Knight</button>
+            <button class="keyword-chip" data-keyword="forest">🌲 Forest</button>
+            <button class="keyword-chip" data-keyword="castle">🏰 Castle</button>
+            <button class="keyword-chip" data-keyword="magic">✨ Magic</button>
+            <button class="keyword-chip" data-keyword="star">⭐ Star</button>
+            <button class="keyword-chip" data-keyword="moon">🌙 Moon</button>
+            <button class="keyword-chip" data-keyword="unicorn">🦄 Unicorn</button>
+            <button class="keyword-chip" data-keyword="fairy">🧚 Fairy</button>
+            <button class="keyword-chip" data-keyword="robot">🤖 Robot</button>
+            <button class="keyword-chip" data-keyword="space">🚀 Space</button>
+            <button class="keyword-chip" data-keyword="ocean">🌊 Ocean</button>
+            <button class="keyword-chip" data-keyword="mountain">⛰️ Mountain</button>
+            <button class="keyword-chip" data-keyword="garden">🌸 Garden</button>
+          </div>
+        </div>
+
+        <div class="custom-keywords">
+          <h3>Or Add Your Own</h3>
+          <div class="input-group">
+            <input type="text" id="customKeyword" placeholder="Enter a keyword...">
+            <button id="addKeyword" class="btn btn-small">Add</button>
+          </div>
+        </div>
+
+        <div class="selected-keywords">
+          <h3>Selected Keywords</h3>
+          <div id="selectedKeywords" class="selected-chips">
+            <p class="empty-message">No keywords selected yet</p>
+          </div>
+        </div>
+
+        <button id="generateStory" class="btn btn-primary" disabled>
+          Generate My Story
+        </button>
+      </div>
+
+      <div id="storyResult" class="story-result" style="display: none;">
+        <h2>Your Personalised Story</h2>
+        <div id="storyContent" class="story-content">
+          <!-- Generated story will appear here -->
+        </div>
+        <div class="story-actions">
+          <button id="readAloud" class="btn btn-secondary">
+            🔊 Read to Me
+          </button>
+          <button id="newStory" class="btn btn-primary">
+            Create Another Story
+          </button>
+        </div>
+      </div>
+
+      <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Creating your magical story...</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/personalised.js') }}"></script>
+</body>
+
+</html>

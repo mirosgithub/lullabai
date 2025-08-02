@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bedtime Story Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>🌙 Bedtime Story Generator</h1>
+      <p>Create magical moments with personalised bedtime stories</p>
+    </header>
+
+    <main class="options">
+      <div class="option-card classic">
+        <div class="card-content">
+          <h2>📚 Classic Stories</h2>
+          <p>Read beautiful pre-written bedtime stories</p>
+          <a href="/classic" class="btn btn-primary">Read Classic Stories</a>
+        </div>
+      </div>
+
+      <div class="option-card personalised">
+        <div class="card-content">
+          <h2>✨ Personalised Stories</h2>
+          <p>Generate your own unique story with keywords</p>
+          <a href="/personalised" class="btn btn-secondary">Create My Story</a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Made with ❤️ for sweet dreams</p>
+    </footer>
+  </div>
+</body>
+
+</html>
