@@ -194,6 +194,17 @@ function displayGeneratedStory(story) {
         <div class="story-text">
             ${story.content.replace(/\n/g, '<br>')}
         </div>
+        <div class="story-actions">
+            <button class="btn btn-secondary" id="readAloud">
+                🔊 Read to Me
+            </button>
+            <button class="btn btn-secondary" id="pauseBtn" style="display: none;">
+                ⏸️ Pause
+            </button>
+            <button class="btn btn-primary" id="newStory">
+                ✨ New Story
+            </button>
+        </div>
     `;
 
   storyResult.style.display = 'block';
@@ -211,7 +222,17 @@ function setupStoryActions() {
   document.addEventListener('click', function (e) {
     if (e.target.id === 'readAloud') {
       const storyText = document.querySelector('.story-text').textContent;
-      readStoryAloud(storyText);
+      const readButton = e.target;
+      const pauseButton = document.getElementById('pauseBtn');
+      readStoryAloud(storyText, readButton, pauseButton);
+    }
+  });
+
+  // Pause button
+  document.addEventListener('click', function (e) {
+    if (e.target.id === 'pauseBtn') {
+      const readButton = document.getElementById('readAloud');
+      pauseSpeech(readButton, e.target);
     }
   });
 
@@ -224,7 +245,7 @@ function setupStoryActions() {
 }
 
 // Read story aloud using Web Speech API
-function readStoryAloud(text) {
+function readStoryAloud(text, readButton, pauseButton) {
   if (!text) {
     alert('No text to read');
     return;
@@ -250,25 +271,24 @@ function readStoryAloud(text) {
 
     window.speechSynthesis.speak(utterance);
 
-    // Update button text
-    const readButton = event.target;
-    const originalText = readButton.textContent;
-    readButton.textContent = '⏸️ Pause';
-    readButton.onclick = () => pauseSpeech(readButton, originalText, text);
+    // Show pause button, hide read button
+    readButton.style.display = 'none';
+    pauseButton.style.display = 'inline-block';
 
     utterance.onend = () => {
-      readButton.textContent = originalText;
-      readButton.onclick = () => readStoryAloud(text);
+      // Show read button, hide pause button
+      readButton.style.display = 'inline-block';
+      pauseButton.style.display = 'none';
     };
 
     utterance.onpause = () => {
-      readButton.textContent = '▶️ Resume';
-      readButton.onclick = () => resumeSpeech(readButton, originalText);
+      pauseButton.textContent = '▶️ Resume';
+      pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
     };
 
     utterance.onresume = () => {
-      readButton.textContent = '⏸️ Pause';
-      readButton.onclick = () => pauseSpeech(readButton, originalText, text);
+      pauseButton.textContent = '⏸️ Pause';
+      pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
     };
   } else {
     alert('Speech synthesis not supported in this browser');
@@ -276,25 +296,30 @@ function readStoryAloud(text) {
 }
 
 // Pause speech
-function pauseSpeech(button, originalText, text) {
+function pauseSpeech(readButton, pauseButton) {
   if (window.speechSynthesis) {
     window.speechSynthesis.pause();
-    button.textContent = '▶️ Resume';
-    button.onclick = () => resumeSpeech(button, originalText);
+    pauseButton.textContent = '▶️ Resume';
+    pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
   }
 }
 
 // Resume speech
-function resumeSpeech(button, originalText) {
+function resumeSpeech(readButton, pauseButton) {
   if (window.speechSynthesis) {
     window.speechSynthesis.resume();
-    button.textContent = '⏸️ Pause';
-    button.onclick = () => pauseSpeech(button, originalText);
+    pauseButton.textContent = '⏸️ Pause';
+    pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
   }
 }
 
 // Reset story generator
 function resetStoryGenerator() {
+  // Stop any ongoing speech
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+
   // Clear selected keywords
   selectedKeywords = [];
 
