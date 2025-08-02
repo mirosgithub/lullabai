@@ -6,14 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classic Stories - Bedtime Story Generator</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="classic-page">
   <div class="container">
-    <header class="page-header">
-      <a href="/" class="back-btn">← Back</a>
-      <h1>📚 Classic Stories</h1>
+    <!-- Header with hamburger menu -->
+    <header class="classic-header">
+      <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
     </header>
+
+          <!-- Navigation Menu -->
+      <div class="nav-menu" id="navMenu">
+        <div class="nav-close" onclick="toggleMenu()">
+          <div class="close-icon">×</div>
+        </div>
+        <div class="nav-menu-content">
+          <a href="/" class="nav-link">About Us</a>
+          <a href="/classic" class="nav-link">Classic</a>
+          <a href="/personalised" class="nav-link">Personalised</a>
+        </div>
+      </div>
+
+    <!-- Page Title -->
+    <div class="classic-title">
+      <h1>Classic Stories</h1>
+    </div>
 
     <main class="stories-container">
       <div id="loading" class="loading">
@@ -43,6 +65,12 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/classic.js') }}"></script>
+  <script>
+    function toggleMenu() {
+      const navMenu = document.getElementById('navMenu');
+      navMenu.classList.toggle('nav-menu-open');
+    }
+  </script>
 </body>
 
 </html>
