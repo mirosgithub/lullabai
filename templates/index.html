@@ -37,9 +37,10 @@
           <div class="close-icon">×</div>
         </div>
         <div class="nav-menu-content">
-          <a href="/" class="nav-link">About Us</a>
-          <a href="/classic" class="nav-link">Classic</a>
-          <a href="/personalised" class="nav-link">Personalised</a>
+          <a href="/" class="nav-link">Home</a>
+          <a href="/classic" class="nav-link">Classic Stories</a>
+          <a href="/personalised" class="nav-link">Personalised Stories</a>
+          <a href="/adult" class="nav-link">Grown-ups Stories</a>
         </div>
       </div>
 
@@ -96,7 +97,7 @@
 
       <div class="option-card adult">
         <div class="card-content">
-          <h2>🌿 Adult Bedtime Stories</h2>
+          <h2>Adult Bedtime Stories</h2>
           <p>Soothing stories for grown-ups with therapeutic elements</p>
           <a href="/adult" class="btn btn-tertiary">Find Peace & Sleep</a>
         </div>
@@ -108,12 +109,7 @@
     </footer>
   </div>
 
-  <script>
-    function toggleMenu() {
-      const navMenu = document.getElementById('navMenu');
-      navMenu.classList.toggle('nav-menu-open');
-    }
-  </script>
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 
 </html>

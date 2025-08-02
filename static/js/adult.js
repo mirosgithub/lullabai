@@ -1,6 +1,12 @@
 // Adult bedtime story page functionality
 let currentUtterance = null;
 
+// Hamburger menu functionality
+function toggleMenu() {
+  const navMenu = document.getElementById('navMenu');
+  navMenu.classList.toggle('nav-menu-open');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   setupSleepIssues();
   setupCustomSleepReason();
@@ -404,7 +410,7 @@ function readStoryAloud(text, readButton, pauseButton) {
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.7; // Slower for adult stories
+    utterance.rate = 0.7; // Slower for grown-up stories
     utterance.pitch = 0.9; // Slightly lower pitch for soothing effect
     utterance.volume = 1.0;
 

@@ -4,16 +4,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adult Bedtime Stories - Bedtime Story Generator</title>
+  <title>Grown-ups Bedtime Stories - Bedtime Story Generator</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="adult-page">
   <div class="container">
-    <header class="page-header">
-      <a href="/" class="back-btn">← Back</a>
-      <h1>🌿 Adult Bedtime Stories</h1>
+    <header class="classic-header">
+      <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
     </header>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-close" onclick="toggleMenu()">
+        <span class="close-icon">×</span>
+      </div>
+      <div class="nav-menu-content">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/classic" class="nav-link">Classic Stories</a>
+        <a href="/personalised" class="nav-link">Personalised Stories</a>
+        <a href="/adult" class="nav-link">Grown-ups Stories</a>
+      </div>
+    </div>
+
+    <div class="classic-title">
+      <h1>Grown-ups Bedtime Stories</h1>
+    </div>
 
     <main class="adult-container">
       <div class="story-generator">
@@ -33,14 +54,14 @@
           <p>Choose from common issues or describe your specific situation</p>
 
           <div class="sleep-options">
-            <button class="sleep-option" data-issue="stress"> Stress & Anxiety</button>
-            <button class="sleep-option" data-issue="work">💼 Work Pressure</button>
-            <button class="sleep-option" data-issue="loneliness"> Loneliness</button>
-            <button class="sleep-option" data-issue="grief">💔 Grief & Loss</button>
-            <button class="sleep-option" data-issue="overthinking">🤔 Overthinking</button>
-            <button class="sleep-option" data-issue="pain">😣 Physical Pain</button>
-            <button class="sleep-option" data-issue="change">🔄 Life Changes</button>
-            <button class="sleep-option" data-issue="general"> General Insomnia</button>
+            <button class="sleep-option" data-issue="stress">Stress & Anxiety</button>
+            <button class="sleep-option" data-issue="work">Work Pressure</button>
+            <button class="sleep-option" data-issue="loneliness">Loneliness</button>
+            <button class="sleep-option" data-issue="grief">Grief & Loss</button>
+            <button class="sleep-option" data-issue="overthinking">Overthinking</button>
+            <button class="sleep-option" data-issue="pain">Physical Pain</button>
+            <button class="sleep-option" data-issue="change">Life Changes</button>
+            <button class="sleep-option" data-issue="general">General Insomnia</button>
           </div>
 
           <div class="custom-sleep-reason">
@@ -60,18 +81,18 @@
           <h3>Childhood Memories (Optional)</h3>
           <p>Select elements that bring you comfort and nostalgia</p>
           <div class="nostalgia-chips">
-            <button class="nostalgia-chip" data-memory="grandparents">👴👵 Grandparents</button>
-            <button class="nostalgia-chip" data-memory="summer">☀️ Summer Days</button>
-            <button class="nostalgia-chip" data-memory="rain">🌧️ Rainy Days</button>
-            <button class="nostalgia-chip" data-memory="books">📚 Bedtime Books</button>
-            <button class="nostalgia-chip" data-memory="lullabies">🎵 Lullabies</button>
-            <button class="nostalgia-chip" data-memory="blanket">️ Comfort Blanket</button>
-            <button class="nostalgia-chip" data-memory="stories"> Story Time</button>
-            <button class="nostalgia-chip" data-memory="nature">🌳 Nature Walks</button>
-            <button class="nostalgia-chip" data-memory="family">👨‍👩‍👧‍👦 Family Time</button>
-            <button class="nostalgia-chip" data-memory="pets">🐕 Beloved Pets</button>
-            <button class="nostalgia-chip" data-memory="home">🏠 Childhood Home</button>
-            <button class="nostalgia-chip" data-memory="friends">👥 Childhood Friends</button>
+            <button class="nostalgia-chip" data-memory="grandparents">Grandparents</button>
+            <button class="nostalgia-chip" data-memory="summer">Summer Days</button>
+            <button class="nostalgia-chip" data-memory="rain">Rainy Days</button>
+            <button class="nostalgia-chip" data-memory="books">Bedtime Books</button>
+            <button class="nostalgia-chip" data-memory="lullabies">Lullabies</button>
+            <button class="nostalgia-chip" data-memory="blanket">Comfort Blanket</button>
+            <button class="nostalgia-chip" data-memory="stories">Story Time</button>
+            <button class="nostalgia-chip" data-memory="nature">Nature Walks</button>
+            <button class="nostalgia-chip" data-memory="family">Family Time</button>
+            <button class="nostalgia-chip" data-memory="pets">Beloved Pets</button>
+            <button class="nostalgia-chip" data-memory="home">Childhood Home</button>
+            <button class="nostalgia-chip" data-memory="friends">Childhood Friends</button>
           </div>
         </div>
 
