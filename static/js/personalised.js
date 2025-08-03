@@ -224,7 +224,18 @@ function setupStoryActions() {
   // Read aloud button
   document.addEventListener('click', function (e) {
     if (e.target.id === 'readAloud') {
-      const storyText = document.querySelector('.story-text').textContent;
+      // Get the original story content from sessionStorage, not from displayed HTML
+      const storedStory = sessionStorage.getItem('currentGeneratedStory');
+      let storyText;
+
+      if (storedStory) {
+        const story = JSON.parse(storedStory);
+        storyText = story.content; // Use original content with newlines
+      } else {
+        // Fallback to displayed text if no stored story
+        storyText = document.querySelector('.story-text').textContent;
+      }
+
       const readButton = e.target;
       const pauseButton = document.getElementById('pauseBtn');
       readStoryAloudStreaming(storyText, readButton, pauseButton);
@@ -260,11 +271,11 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
     readButton.disabled = true;
     pauseButton.style.display = 'none';
 
-    // Split text into sentences for faster processing
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    // Split text into paragraphs for more natural breaks
+    const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
 
-    // Generate first chunk immediately
-    const firstChunk = sentences.slice(0, 2).join('. ') + '.';
+    // Generate first paragraph immediately
+    const firstChunk = paragraphs[0];
 
     // Start generating first chunk
     const response = await fetch('/api/tts', {
@@ -300,7 +311,7 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
     // Handle audio events
     audio.onended = () => {
       // Generate next chunk while current is playing
-      generateNextChunk(sentences.slice(2), readButton, pauseButton);
+      generateNextChunk(paragraphs.slice(1), readButton, pauseButton);
     };
 
     // Only change button state if user explicitly paused
@@ -325,15 +336,15 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
   }
 }
 
-async function generateNextChunk(remainingSentences, readButton, pauseButton) {
-  if (remainingSentences.length === 0) {
+async function generateNextChunk(remainingParagraphs, readButton, pauseButton) {
+  if (remainingParagraphs.length === 0) {
     // Story finished
     resetButtonState(readButton, pauseButton);
     return;
   }
 
   try {
-    const chunk = remainingSentences.slice(0, 2).join('. ') + '.';
+    const chunk = remainingParagraphs[0];
 
     const response = await fetch('/api/tts', {
       method: 'POST',
@@ -356,7 +367,7 @@ async function generateNextChunk(remainingSentences, readButton, pauseButton) {
 
     // Set up for next chunk
     audio.onended = () => {
-      generateNextChunk(remainingSentences.slice(2), readButton, pauseButton);
+      generateNextChunk(remainingParagraphs.slice(1), readButton, pauseButton);
     };
 
     // Only change button state if user explicitly paused
