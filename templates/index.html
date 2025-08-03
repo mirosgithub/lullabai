@@ -19,99 +19,107 @@
 </head>
 
 <body>
-  <!-- 🌌 NEW Animated Starry Banner -->
-  <div class="scene">
-    <div class="moon"></div>
-    <img src="{{ url_for('static', filename='images/forest.png') }}" class="forest" alt="forest image">
-    
-    <!-- Centered content -->
-    <div class="intro-content">
-      <div class="intro-text">
-        <h2 class="welcome-text">WELCOME TO</h2>
-        <h1 class="brand-title">Lullab.ai</h1>
-        <p class="intro-subtitle">Drift into dreams with stories made just for you</p>
-      </div>
-    </div>
+  <!-- Splash Screen -->
+  <div id="splash" class="splash-screen">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Lullab.ai Logo" class="splash-logo">
   </div>
 
-  <!-- ✨ Dot background section (separate stars.js) -->
-  <section class="sec" style="--star-color: #D5AB55;"></section>
-
-  <!-- Header overlaying the banner -->
-  <div class="intro-header">
-    <div class="cloud-logo">
-      <img src="{{ url_for('static', filename='images/logowithlullabi.png') }}" alt="Lullab.ai Logo" class="logo-img">
-    </div>
-    <div class="hamburger-menu" onclick="toggleMenu()">
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-  </div>
-
-  <div class="container">
-
-    <!-- Navigation Menu -->
-    <div class="nav-menu" id="navMenu">
-      <div class="nav-close" onclick="toggleMenu()">
-        <div class="close-icon">×</div>
-      </div>
-      <div class="nav-menu-content">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/classic" class="nav-link">Classic Stories</a>
-        <a href="/personalised" class="nav-link">Personalised Stories</a>
-        <a href="/adult" class="nav-link">Grown-ups Stories</a>
+  <!-- Main Content (initially hidden) -->
+  <div id="main-content" class="main-content">
+    <!-- 🌌 NEW Animated Starry Banner -->
+    <div class="scene">
+      <div class="moon"></div>
+      <img src="{{ url_for('static', filename='images/forest.png') }}" class="forest" alt="forest image">
+      
+      <!-- Centered content -->
+      <div class="intro-content">
+        <div class="intro-text">
+          <h2 class="welcome-text">WELCOME TO</h2>
+          <h1 class="brand-title">Lullab.ai</h1>
+          <p class="intro-subtitle">Drift into dreams with stories made just for you</p>
+        </div>
       </div>
     </div>
 
-    <!-- About Section -->
-    <section class="about-section">
-      <div class="about-content">
-        <div class="about-text">
-          <h2 class="about-title">What is Lullab.ai?</h2>
-          <div class="about-body">
-            <p>We know life can get busy for parents.</p>
-            <p>But every child deserves a magical goodnight.</p>
-            <p>At Lullab.ai, we believe bedtime should be a moment of wonder, comfort, and connection. That's why we built an AI-powered platform that creates unique, personalised bedtime stories just for your child.</p>
-            <p>From dinosaurs to dragons and princesses – we can do it all.</p>
+    <!-- ✨ Dot background section (separate stars.js) -->
+    <section class="sec" style="--star-color: #D5AB55;"></section>
+
+    <!-- Header overlaying the banner -->
+    <div class="intro-header">
+      <div class="cloud-logo">
+        <img src="{{ url_for('static', filename='images/logowithlullabi.png') }}" alt="Lullab.ai Logo" class="logo-img">
+      </div>
+      <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu" id="navMenu">
+        <div class="nav-close" onclick="toggleMenu()">
+          <div class="close-icon">×</div>
+        </div>
+        <div class="nav-menu-content">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/classic" class="nav-link">Classic Stories</a>
+          <a href="/personalised" class="nav-link">Personalised Stories</a>
+          <a href="/adult" class="nav-link">Grown-ups Stories</a>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <section class="about-section">
+        <div class="about-content">
+          <div class="about-text">
+            <h2 class="about-title">What is Lullab.ai?</h2>
+            <div class="about-body">
+              <p>We know life can get busy for parents.</p>
+              <p>But every child deserves a magical goodnight.</p>
+              <p>At Lullab.ai, we believe bedtime should be a moment of wonder, comfort, and connection. That's why we built an AI-powered platform that creates unique, personalised bedtime stories just for your child.</p>
+              <p>From dinosaurs to dragons and princesses – we can do it all.</p>
+            </div>
+          </div>
+          <div class="about-image">
+            <img src="{{ url_for('static', filename='images/boysleeping.png') }}" alt="What is Lullab.ai?" class="about-img">
           </div>
         </div>
-        <div class="about-image">
-          <img src="{{ url_for('static', filename='images/boysleeping.png') }}" alt="What is Lullab.ai?" class="about-img">
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Options -->
-    <main class="options">
-      <div class="option-card classic">
-        <div class="card-content">
-          <h2>Classic Stories</h2>
-          <p>Read beautiful pre-written bedtime stories</p>
-          <a href="/classic" class="btn btn-primary">Read Classic Stories</a>
+      <!-- Options -->
+      <main class="options">
+        <div class="option-card classic">
+          <div class="card-content">
+            <h2>Classic Stories</h2>
+            <p>Read beautiful pre-written bedtime stories</p>
+            <a href="/classic" class="btn btn-primary">Read Classic Stories</a>
+          </div>
         </div>
-      </div>
 
-      <div class="option-card personalised">
-        <div class="card-content">
-          <h2>Personalised Stories</h2>
-          <p>Generate your own unique story with keywords</p>
-          <a href="/personalised" class="btn btn-secondary">Create My Story</a>
+        <div class="option-card personalised">
+          <div class="card-content">
+            <h2>Personalised Stories</h2>
+            <p>Generate your own unique story with keywords</p>
+            <a href="/personalised" class="btn btn-secondary">Create My Story</a>
+          </div>
         </div>
-      </div>
 
-      <div class="option-card adult">
-        <div class="card-content">
-          <h2>Adult Bedtime Stories</h2>
-          <p>Soothing stories for grown-ups with therapeutic elements</p>
-          <a href="/adult" class="btn btn-tertiary">Find Peace & Sleep</a>
+        <div class="option-card adult">
+          <div class="card-content">
+            <h2>Adult Bedtime Stories</h2>
+            <p>Soothing stories for grown-ups with therapeutic elements</p>
+            <a href="/adult" class="btn btn-tertiary">Find Peace & Sleep</a>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
 
-    <footer>
-      <p>Made with ❤️ for sweet dreams</p>
-    </footer>
+      <footer>
+        <p>Made with ❤️ for sweet dreams</p>
+      </footer>
+    </div>
   </div>
 
   <!-- Scripts -->
