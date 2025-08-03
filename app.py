@@ -174,7 +174,7 @@ def test_gemini():
 
 @app.route('/api/tts', methods=['POST'])
 def text_to_speech():
-    """Convert text to speech using Google Cloud TTS"""
+    """Convert text to speech using Google Cloud TTS and return as base64 blob URL"""
     try:
         data = request.get_json()
         text = data.get('text', '')
@@ -201,14 +201,12 @@ def text_to_speech():
             input=synthesis_input, voice=voice, audio_config=audio_config
         )
         
-        # Save audio file temporarily (in production, you'd upload to cloud storage)
-        audio_filename = f"static/audio/story_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp3"
-        os.makedirs('static/audio', exist_ok=True)
+        # Convert audio content to base64 and create blob URL
+        import base64
+        audio_base64 = base64.b64encode(response.audio_content).decode('utf-8')
+        blob_url = f"data:audio/mp3;base64,{audio_base64}"
         
-        with open(audio_filename, "wb") as out:
-            out.write(response.audio_content)
-        
-        return jsonify({'audio_url': f'/{audio_filename}'})
+        return jsonify({'audio_url': blob_url})
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
