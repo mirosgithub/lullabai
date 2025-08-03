@@ -1,79 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bedtime Story Generator</title>
-
-  <!-- Main Styles -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/stars.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Modak&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Modak&family=Chivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/stars.css') }}">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
-  <!-- ✨ Stars background -->
+  <!-- 🌌 NEW Animated Starry Banner -->
+  <div class="scene">
+    <div class="moon"></div>
+    <img src="{{ url_for('static', filename='images/forest.png') }}" class="forest" alt="forest image">
+    
+    <!-- Centered content -->
+    <div class="intro-content">
+      <div class="intro-text">
+        <h2 class="welcome-text">WELCOME TO</h2>
+        <h1 class="brand-title">Lullab.ai</h1>
+        <p class="intro-subtitle">Drift into dreams with stories made just for you</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✨ Dot background section (separate stars.js) -->
   <section class="sec" style="--star-color: #D5AB55;"></section>
 
+  <!-- Header overlaying the banner -->
+  <div class="intro-header">
+    <div class="cloud-logo">
+      <img src="{{ url_for('static', filename='images/logowithlullabi.png') }}" alt="Lullab.ai Logo" class="logo-img">
+    </div>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+    </div>
+  </div>
+
   <div class="container">
-    <!-- Intro Section with Gradient Background -->
-    <section class="intro-section">
-      <!-- Background Video -->
-      <video class="intro-video" autoplay muted loop playsinline>
-        <source src="{{ url_for('static', filename='videos/indexbackground.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
 
-      <!-- Header with logo and menu -->
-      <div class="intro-header">
-        <div class="cloud-logo">
-          <img src="{{ url_for('static', filename='images/logowithlullabi.png') }}" alt="Lullab.ai Logo" class="logo-img">
-        </div>
-        <div class="hamburger-menu" onclick="toggleMenu()">
-          <div class="hamburger-line"></div>
-          <div class="hamburger-line"></div>
-          <div class="hamburger-line"></div>
-        </div>
+    <!-- Navigation Menu -->
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-close" onclick="toggleMenu()">
+        <div class="close-icon">×</div>
       </div>
-
-      <!-- Navigation Menu -->
-      <div class="nav-menu" id="navMenu">
-        <div class="nav-close" onclick="toggleMenu()">
-          <div class="close-icon">×</div>
-        </div>
-        <div class="nav-menu-content">
-          <a href="/" class="nav-link">Home</a>
-          <a href="/classic" class="nav-link">Classic Stories</a>
-          <a href="/personalised" class="nav-link">Personalised Stories</a>
-          <a href="/adult" class="nav-link">Grown-ups Stories</a>
-        </div>
+      <div class="nav-menu-content">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/classic" class="nav-link">Classic Stories</a>
+        <a href="/personalised" class="nav-link">Personalised Stories</a>
+        <a href="/adult" class="nav-link">Grown-ups Stories</a>
       </div>
+    </div>
 
-      <!-- Centered content -->
-      <div class="intro-content">
-        <div class="intro-text">
-          <h2 class="welcome-text">WELCOME TO</h2>
-          <h1 class="brand-title">Lullab.ai</h1>
-          <p class="intro-subtitle">Drift into dreams with stories made just for you</p>
-        </div>
-      </div>
-
-      <!-- Scroll down indicator -->
-      <div class="scroll-indicator">
-        <div class="scroll-text">Scroll Down</div>
-        <div class="scroll-arrow">↓</div>
-      </div>
-    </section>
-
-    <!-- What is Lullab.ai? Section -->
+    <!-- About Section -->
     <section class="about-section">
       <div class="about-content">
         <div class="about-text">
@@ -82,7 +73,7 @@
             <p>We know life can get busy for parents.</p>
             <p>But every child deserves a magical goodnight.</p>
             <p>At Lullab.ai, we believe bedtime should be a moment of wonder, comfort, and connection. That's why we built an AI-powered platform that creates unique, personalised bedtime stories just for your child.</p>
-            <p>From dinosaurs to dragons and princesses - we can do it all.</p>
+            <p>From dinosaurs to dragons and princesses – we can do it all.</p>
           </div>
         </div>
         <div class="about-image">
@@ -91,6 +82,7 @@
       </div>
     </section>
 
+    <!-- Options -->
     <main class="options">
       <div class="option-card classic">
         <div class="card-content">

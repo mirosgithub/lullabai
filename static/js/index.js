@@ -1,46 +1,62 @@
 // Index page functionality
 document.addEventListener('DOMContentLoaded', function () {
-  // Hamburger menu functionality
+  // Hamburger menu
   function toggleMenu() {
     const navMenu = document.getElementById('navMenu');
     if (navMenu) {
       navMenu.classList.toggle('nav-menu-open');
     }
   }
-
-  // Make toggleMenu function globally available
   window.toggleMenu = toggleMenu;
 
-  // Close menu when clicking on a nav link
+  // Close menu on link click
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      const navMenu = document.getElementById('navMenu');
-      if (navMenu) {
-        navMenu.classList.remove('nav-menu-open');
-      }
+    link.addEventListener('click', () => {
+      document.getElementById('navMenu')?.classList.remove('nav-menu-open');
     });
   });
 
-  // Close menu when clicking outside of it
-  document.addEventListener('click', function(event) {
+  // Close menu on outside click
+  document.addEventListener('click', function (e) {
     const navMenu = document.getElementById('navMenu');
-    const hamburgerMenu = document.querySelector('.hamburger-menu');
-    
-    if (navMenu && navMenu.classList.contains('nav-menu-open')) {
-      if (!navMenu.contains(event.target) && !hamburgerMenu.contains(event.target)) {
-        navMenu.classList.remove('nav-menu-open');
-      }
+    const hamburger = document.querySelector('.hamburger-menu');
+    if (navMenu?.classList.contains('nav-menu-open') &&
+        !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+      navMenu.classList.remove('nav-menu-open');
     }
   });
 
-  // Close menu when pressing Escape key
-  document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-      const navMenu = document.getElementById('navMenu');
-      if (navMenu && navMenu.classList.contains('nav-menu-open')) {
-        navMenu.classList.remove('nav-menu-open');
-      }
+  // Escape key closes menu
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.getElementById('navMenu')?.classList.remove('nav-menu-open');
     }
   });
-}); 
+
+  // ⭐ Add dynamic stars to the .scene
+  function generateSceneStars() {
+    const count = 400;
+    const scene = document.querySelector('.scene');
+    let i = 0;
+    while (i < count) {
+      const star = document.createElement('i');
+      const x = Math.floor(Math.random() * window.innerWidth);
+      const y = Math.floor(Math.random() * window.innerHeight);
+      const size = Math.random() * 2;
+      const duration = 5 + Math.random() * 5;
+
+      star.style.left = `${x}px`;
+      star.style.top = `${y}px`;
+      star.style.width = `${1 + size}px`;
+      star.style.height = `${1 + size}px`;
+      star.style.animationDuration = `${duration}s`;
+      star.style.animationDelay = `${Math.random() * 5}s`;
+
+      scene.appendChild(star);
+      i++;
+    }
+  }
+
+  generateSceneStars();
+});

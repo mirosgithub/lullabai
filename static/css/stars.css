@@ -7,7 +7,7 @@
     pointer-events: none;
     overflow: hidden;
     --star-color: #D5AB55;
-    z-index: 0;
+    z-index: -1;
   }
   
   /* 각 별 */

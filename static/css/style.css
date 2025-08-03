@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #0f0520 0%, #2d117e 100%);
   min-height: 100vh;
   color: #333;
@@ -17,6 +17,7 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+  padding-top: 100px; /* Account for fixed header */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -68,15 +69,20 @@ body {
   opacity: 0.3;
 }
 
-/* Header with logo and menu */
+/* Header with logo and menu - overlaying the banner */
 .intro-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  z-index: 3;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   width: 100%;
   padding: 20px 80px;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .cloud-logo {
@@ -126,8 +132,8 @@ body {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
-  z-index: 1000;
+  background: url('../images/boysitting.png') center center/cover no-repeat;
+  z-index: 1001;
   transition: top 0.4s ease-in-out;
   display: flex;
   align-items: center;
@@ -152,9 +158,9 @@ body {
 .nav-link {
   color: white;
   text-decoration: none;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-family: 'Modak', cursive;
+  font-size: 3.2rem;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 2px;
   padding: 20px 40px;
@@ -177,7 +183,7 @@ body {
   top: 30px;
   right: 30px;
   cursor: pointer;
-  z-index: 1001;
+  z-index: 1002;
   width: 50px;
   height: 50px;
   display: flex;
@@ -204,12 +210,15 @@ body {
 
 /* Centered content */
 .intro-content {
-  flex: 1;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  position: relative;
-  z-index: 2;
+  z-index: 60;
   width: 100%;
   padding: 0 80px;
 }
@@ -222,7 +231,7 @@ body {
 }
 
 .welcome-text {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 2.4rem;
   font-weight: 400;
   letter-spacing: 3px;
@@ -242,7 +251,7 @@ body {
 }
 
 .intro-subtitle {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 2.6rem;
   font-weight: 300;
   font-style: italic;
@@ -269,7 +278,7 @@ body {
 }
 
 .scroll-text {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.9rem;
   font-weight: 300;
   letter-spacing: 2px;
@@ -337,7 +346,7 @@ body {
 }
 
 .about-body {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-style: italic;
   color: white;
   line-height: 1.8;
@@ -490,7 +499,7 @@ body {
 }
 
 .option-card.classic p {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-style: italic;
   font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.8);
@@ -534,7 +543,7 @@ body {
 }
 
 .option-card.personalised p {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-style: italic;
   font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.8);
@@ -578,7 +587,7 @@ body {
 }
 
 .option-card.adult p {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-style: italic;
   font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.8);
@@ -603,7 +612,7 @@ body {
 .btn-primary {
   background: #1e3a8a;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }
 
@@ -616,7 +625,7 @@ body {
 .btn-secondary {
   background: #4a2c5a;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }
 
@@ -628,7 +637,7 @@ body {
 .btn-tertiary {
   background: #d2691e;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }
 
@@ -762,7 +771,7 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Adult page specific story generator */
@@ -786,14 +795,14 @@ body {
   font-size: 2.5rem;
   margin-bottom: 15px;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .story-generator>p {
   font-size: 1.3rem;
   color: white;
   margin-bottom: 40px;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .keywords-section {
@@ -804,7 +813,7 @@ body {
   font-size: 1.6rem;
   margin-bottom: 20px;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .keyword-chips {
@@ -823,7 +832,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1.1rem;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .keyword-chip:hover {
@@ -848,7 +857,7 @@ body {
   font-size: 1.7rem;
   margin-bottom: 20px;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .name-hint {
@@ -856,7 +865,7 @@ body {
   color: rgba(255, 255, 255, 0.8);
   margin-top: 10px;
   font-style: italic;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .custom-keywords {
@@ -867,7 +876,7 @@ body {
   font-size: 1.6rem;
   margin-bottom: 20px;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .input-group {
@@ -886,7 +895,7 @@ body {
   transition: border-color 0.3s ease;
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .input-group input:focus {
@@ -902,7 +911,7 @@ body {
   font-size: 1.6rem;
   margin-bottom: 20px;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .selected-keywords {
@@ -923,7 +932,7 @@ body {
 .empty-message {
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .selected-chip {
@@ -955,14 +964,14 @@ body {
   margin-top: 30px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .story-result h2 {
   font-size: 2.2rem;
   margin-bottom: 25px;
   color: #333;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .story-content {
@@ -973,14 +982,14 @@ body {
   line-height: 1.8;
   font-size: 1.2rem;
   color: #333;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .story-actions {
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Loading and error states */
@@ -1091,7 +1100,7 @@ body.adult-page {
 }
 
 .story-card h3 {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.4rem;
   font-weight: bold;
   margin-bottom: 15px;
@@ -1100,7 +1109,7 @@ body.adult-page {
 }
 
 .story-card p {
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1rem;
   font-weight: 400;
   color: #4a2c5a;
@@ -1125,7 +1134,7 @@ body.adult-page {
   color: white;
   padding: 6px 12px;
   border-radius: 15px;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -1375,7 +1384,7 @@ footer {
   margin: 0 auto;
   padding: 0 40px;
   border-radius: 20px;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
 }
 
@@ -1400,7 +1409,7 @@ footer {
   font-size: 16px;
   text-align: center;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-style: italic;
 }
 
@@ -1437,7 +1446,7 @@ footer {
   font-size: 16px;
   text-align: center;
   color: white;
-  font-family: 'Alexandria', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Chivo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-style: italic;
 }
 
@@ -1623,4 +1632,61 @@ footer {
     font-size: 16px;
     /* Prevents zoom on iOS */
   }
+}
+
+/*New Banner*/
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(#111425, #3751e0);
+  background-attachment: fixed;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.scene i {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.4);
+  z-index: 10;
+  opacity: 0.8;
+  animation: animate linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+}
+
+.moon {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
+  border-radius: 50%;
+  z-index: 50;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.1),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.forest {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  transform: scale(1.2);
 }
