@@ -1,0 +1,38 @@
+/* 별 배경 컨테이너 */
+.sec {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    --star-color: #D5AB55;
+    z-index: 0;
+  }
+  
+  /* 각 별 */
+  .star {
+    position: absolute;
+    font-size: 1rem;
+    color: var(--star-color, #ffffff);
+    opacity: 0.8;
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+  }
+  
+  /* FontAwesome 아이콘을 ::before로 생성 (필요시 생략 가능) */
+  .star::before {
+    content: '\f005';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900; /* solid 스타일 */
+  }
+  
+  /* 반짝임 효과 */
+  .star.animate {
+    color: #ffd966;
+    text-shadow:
+      0 0 5px #ffd966,
+      0 0 15px #ffd966,
+      0 0 30px #ffd966;
+  }
+  
