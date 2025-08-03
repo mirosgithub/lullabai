@@ -108,11 +108,9 @@ function setupModal() {
       const storyText = storyContent.querySelector('.story-text').textContent;
       const readButton = e.target;
       const pauseButton = storyContent.querySelector('.pause-btn');
-      readStoryAloudStreaming(storyText, readButton, pauseButton);
+      readStoryAloud(storyText, readButton, pauseButton);
     }
   });
-
-  // Remove the pause button event delegation - it will be handled by direct onclick handlers
 }
 
 // Open story modal
@@ -162,8 +160,9 @@ function displayStoryInModal(story) {
         </div>
     `;
 
-  // Store the story content for later use
+  // Store the story content and ID for later use
   storyContent.dataset.storyContent = story.content;
+  storyContent.dataset.storyId = story.id;
 }
 
 // Close story modal
@@ -171,15 +170,28 @@ function closeStoryModal() {
   const modal = document.getElementById('storyModal');
   modal.style.display = 'none';
 
-  // Stop any ongoing speech
+  // Stop any ongoing audio and clean up
   if (window.currentAudio) {
+    // Remove all event listeners to prevent onerror from firing
+    window.currentAudio.onerror = null;
+    window.currentAudio.onloadstart = null;
+    window.currentAudio.oncanplay = null;
+    window.currentAudio.onplay = null;
+    window.currentAudio.onended = null;
+    window.currentAudio.onpause = null;
+
+    // Pause and clear the audio
     window.currentAudio.pause();
     window.currentAudio.src = '';
+    window.currentAudio = null;
   }
+
+  // Reset any global flags
+  window.isUserPaused = false;
 }
 
-// Streaming TTS implementation using Google TTS API
-async function readStoryAloudStreaming(text, readButton, pauseButton) {
+// Play pre-generated audio for classic stories
+async function readStoryAloud(text, readButton, pauseButton) {
   if (!text) {
     alert('No text to read');
     return;
@@ -187,35 +199,25 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
 
   try {
     // Show loading state
-    readButton.textContent = '🔄 Generating...';
+    readButton.textContent = '🔄 Loading...';
     readButton.disabled = true;
     pauseButton.style.display = 'none';
 
-    // Split text into paragraphs for more natural breaks
-    const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    // Get the story ID from the story content element
+    const storyContent = document.getElementById('storyContent');
+    const storyId = storyContent.dataset.storyId;
 
-    // Generate first paragraph immediately
-    const firstChunk = paragraphs[0];
-
-    // Start generating first chunk
-    const response = await fetch('/api/tts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: firstChunk })
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to generate audio');
+    if (!storyId) {
+      throw new Error('Story ID not found');
     }
 
-    const data = await response.json();
+    // Construct the audio file path
+    const audioUrl = `/static/audio/classic_${storyId}.mp3`;
 
-    // Create audio element and start playing immediately
-    const audio = new Audio(data.audio_url);
+    // Create audio element and start playing
+    const audio = new Audio(audioUrl);
     window.currentAudio = audio;
-    window.isUserPaused = false; // Track if user explicitly paused
+    window.isUserPaused = false;
 
     // Show pause button, hide read button
     readButton.style.display = 'none';
@@ -225,88 +227,43 @@ async function readStoryAloudStreaming(text, readButton, pauseButton) {
     // Set up click handlers
     pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
 
-    // Play first chunk immediately
-    audio.play();
-
     // Handle audio events
-    audio.onended = () => {
-      // Generate next chunk while current is playing
-      generateNextChunk(paragraphs.slice(1), readButton, pauseButton);
+    audio.onloadstart = () => {
+      readButton.textContent = '🔄 Loading...';
     };
 
-    // Only change button state if user explicitly paused
-    audio.onpause = () => {
-      if (window.isUserPaused) {
-        pauseButton.textContent = '▶️ Resume';
-        pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
-      }
+    audio.oncanplay = () => {
+      readButton.textContent = '🔄 Loading...';
     };
 
     audio.onplay = () => {
-      // Reset user pause flag when audio starts playing
       window.isUserPaused = false;
       pauseButton.textContent = '⏸️ Pause';
       pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
     };
 
-  } catch (error) {
-    console.error('TTS Error:', error);
-    alert(`Failed to generate audio: ${error.message}`);
-    resetButtonState(readButton, pauseButton);
-  }
-}
+    audio.onended = () => {
+      // Story finished
+      resetButtonState(readButton, pauseButton);
+    };
 
-async function generateNextChunk(remainingParagraphs, readButton, pauseButton) {
-  if (remainingParagraphs.length === 0) {
-    // Story finished
-    resetButtonState(readButton, pauseButton);
-    return;
-  }
+    audio.onerror = () => {
+      // Only show error if the modal is still open
+      const modal = document.getElementById('storyModal');
+      if (modal.style.display === 'block') {
+        console.error('Audio file not found');
+        alert('Audio file not found. Please try again later.');
+        resetButtonState(readButton, pauseButton);
+      }
+    };
 
-  try {
-    const chunk = remainingParagraphs[0];
-
-    const response = await fetch('/api/tts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: chunk })
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to generate next chunk');
-    }
-
-    const data = await response.json();
-    const audio = new Audio(data.audio_url);
-
-    // Play next chunk
+    // Start playing
     audio.play();
-    window.currentAudio = audio;
-
-    // Set up for next chunk
-    audio.onended = () => {
-      generateNextChunk(remainingParagraphs.slice(1), readButton, pauseButton);
-    };
-
-    // Only change button state if user explicitly paused
-    audio.onpause = () => {
-      if (window.isUserPaused) {
-        pauseButton.textContent = '▶️ Resume';
-        pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
-      }
-    };
-
-    audio.onplay = () => {
-      // Reset user pause flag when audio starts playing
-      window.isUserPaused = false;
-      pauseButton.textContent = '⏸️ Pause';
-      pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
-    };
 
   } catch (error) {
-    console.error('Error generating next chunk:', error);
+    console.error('Audio Error:', error);
+    alert('Error playing audio. Please try again.');
+    resetButtonState(readButton, pauseButton);
   }
 }
 
@@ -314,7 +271,7 @@ async function generateNextChunk(remainingParagraphs, readButton, pauseButton) {
 function pauseSpeech(readButton, pauseButton) {
   if (window.currentAudio) {
     window.currentAudio.pause();
-    window.isUserPaused = true; // Mark that user explicitly paused
+    window.isUserPaused = true;
     pauseButton.textContent = '▶️ Resume';
     pauseButton.onclick = () => resumeSpeech(readButton, pauseButton);
   }
@@ -324,7 +281,7 @@ function pauseSpeech(readButton, pauseButton) {
 function resumeSpeech(readButton, pauseButton) {
   if (window.currentAudio) {
     window.currentAudio.play();
-    window.isUserPaused = false; // Reset user pause flag
+    window.isUserPaused = false;
     pauseButton.textContent = '⏸️ Pause';
     pauseButton.onclick = () => pauseSpeech(readButton, pauseButton);
   }
@@ -336,25 +293,5 @@ function resetButtonState(readButton, pauseButton) {
   readButton.textContent = '🔊 Read to Me';
   readButton.disabled = false;
   pauseButton.style.display = 'none';
-}
-
-// Setup classic stories (temporary function)
-async function setupClassicStories() {
-  try {
-    const response = await fetch('/api/setup-classic-stories', {
-      method: 'POST'
-    });
-    const result = await response.json();
-
-    if (response.ok) {
-      alert(`Success! ${result.message}`);
-      loadStories(); // Reload the stories
-    } else {
-      alert('Error: ' + result.error);
-    }
-  } catch (err) {
-    console.error('Error setting up classic stories:', err);
-    alert('Error setting up classic stories');
-  }
 }
 
