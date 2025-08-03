@@ -242,13 +242,7 @@ function setupStoryActions() {
     }
   });
 
-  // Pause button
-  document.addEventListener('click', function (e) {
-    if (e.target.id === 'pauseBtn') {
-      const readButton = document.getElementById('readAloud');
-      pauseSpeech(readButton, e.target);
-    }
-  });
+  // Remove the pause button event delegation - it will be handled by direct onclick handlers
 
   // New story button
   document.addEventListener('click', function (e) {
