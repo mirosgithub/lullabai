@@ -1,26 +1,38 @@
-# 🌙 Bedtime Story Generator
+# 🌙 Lullab.ai - Bedtime Story Generator
 
-A full-stack web application that generates personalised bedtime stories using AI. Built with Flask, Firebase, and Google's Gemini API.
+A full-stack web application that generates personalised bedtime stories using AI. Built with Flask, Firebase and Google's Gemini and Google Cloud TTS API.
+
+This project, focused on the theme of Nostalgia, won First Place at the [WDCC x SESA Hackathon 2025](https://wdccxsesahackathon.com/), New Zealand's largest tertiary hackathon. The event brought together over 100 participants from 17 teams for 48 hours of intensive development, innovation and collaboration.
+
+## Live Demo
+
+Try Lullab.ai online: [https://lullab-ai-713855574593.asia-southeast1.run.app](https://lullab-ai-713855574593.asia-southeast1.run.app)
+
+## Team Wackathon
+
+**First Place Winners at WDCC x SESA Hackathon 2025**
+
+- **Jedh** ([@jedhr](https://github.com/jedhr)) - Team Leader
+- **Avin Chen** ([@AChen2006](https://github.com/AChen2006)) - Team Member
+- **Ava Lee** ([@avalee0215](https://github.com/avalee0215)) - Frontend Developer
+- **Katarina** ([@katarina370](https://github.com/katarina370)) - Team Member
+- **Parmida** ([@parmidajafarian](https://github.com/parmidajafarian)) - Team Member
+- **Suah Kim** ([@mirosgithub](https://github.com/mirosgithub)) - Backend Developer
 
 ## Features
 
 ### 📚 Classic Stories
-- Browse pre-written bedtime stories
-- Read stories with beautiful typography
-- Web Speech API for text-to-speech
-- Google Cloud TTS for high-quality audio generation
+- Browse classic bedtime stories
+- Read stories with soothing voice
 
 ### ✨ Personalised Stories
-- Generate unique stories using selected keywords
+- Generate unique stories using your name & keywords
 - AI-powered story generation with Gemini API
 - Custom keyword input
-- Automatic story saving to Firebase
 
 ### 🎵 Audio Features
-- Web Speech API for instant reading
-- Google Cloud Text-to-Speech for professional audio
+- Google Cloud Text-to-Speech for high-quality audio generation
 - Pause/resume functionality
-- Downloadable audio files
 
 ## Tech Stack
 
@@ -45,7 +57,7 @@ A full-stack web application that generates personalised bedtime stories using A
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd bedtime-story-generator
+   cd lullabai
    ```
 
 2. **Install dependencies**
@@ -58,15 +70,17 @@ A full-stack web application that generates personalised bedtime stories using A
    ```env
    GEMINI_API_KEY=your_gemini_api_key_here
    SECRET_KEY=your_flask_secret_key_here
+   FIREBASE_KEY_PATH=firebase-key.json
+   TTS_KEY_PATH=tts-key.json
    ```
 
 4. **Configure Firebase**
-   - Ensure your `privatekey.json` file is in the root directory
+   - Place your Firebase service account key file as `firebase-key.json` in the root directory
    - The file should contain your Firebase service account credentials
 
 5. **Set up Google Cloud TTS**
+   - Place your Google Cloud service account key file as `tts-key.json` in the root directory
    - Enable the Text-to-Speech API in your Google Cloud Console
-   - Set up authentication (service account key or application default credentials)
 
 ### Running the Application
 
@@ -76,7 +90,17 @@ A full-stack web application that generates personalised bedtime stories using A
    ```
 
 2. **Access the application**
-   Open your browser and navigate to `http://localhost:5000`
+   Open your browser and navigate to `http://localhost:5002`
+
+### Docker Deployment
+
+1. **Build and run with Docker Compose**
+   ```bash
+   docker compose up --build
+   ```
+
+2. **Access the application**
+   Open your browser and navigate to `http://localhost:8080`
 
 ## API Endpoints
 
@@ -91,23 +115,32 @@ A full-stack web application that generates personalised bedtime stories using A
 ## Project Structure
 
 ```
-bedtime-story-generator/
+lullabai/
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
-├── privatekey.json       # Firebase credentials (gitignored)
+├── firebase-key.json     # Firebase credentials (gitignored)
+├── tts-key.json         # Google Cloud TTS credentials (gitignored)
+├── .env                 # Environment variables (gitignored)
 ├── .gitignore           # Git ignore rules
-├── README.md            # This file
+├── README.md            # README file
 ├── templates/           # HTML templates
 │   ├── index.html       # Main page
 │   ├── classic.html     # Classic stories page
-│   └── personalised.html # Personalised stories page
+│   ├── personalised.html # Personalised stories page
+│   └── adult.html       # Grown-ups stories page
 └── static/              # Static assets
     ├── css/
-    │   └── style.css    # Main stylesheet
+    │   ├── style.css    # Main stylesheet
+    │   └── stars.css    # Stars animation styles
     ├── js/
+    │   ├── index.js     # Main JavaScript
     │   ├── classic.js   # Classic stories functionality
-    │   └── personalised.js # Personalised stories functionality
-    └── audio/           # Generated audio files
+    │   ├── personalised.js # Personalised stories functionality
+    │   ├── adult.js     # Grown-ups stories functionality
+    │   └── stars.js     # Stars animation
+    ├── images/          # Image assets
+    ├── audio/           # Classic story audio files
+    └── videos/          # Video assets
 ```
 
 ## Features in Detail
@@ -116,39 +149,36 @@ bedtime-story-generator/
 - Uses Google's Gemini API for intelligent story creation
 - Incorporates selected keywords naturally into the narrative
 - Generates age-appropriate content (3-8 years)
-- Saves generated stories to Firebase for future access
 
 ### Audio Features
-- **Web Speech API**: Instant browser-based text-to-speech
 - **Google Cloud TTS**: High-quality, natural-sounding audio
-- **Voice Selection**: Automatic female voice selection for bedtime stories
-- **Playback Controls**: Pause, resume, and stop functionality
+- **Voice Selection**: Carefully chosen voice with natural intonation and emotional nuances
+- **Playback Controls**: Pause, resume and stop functionality
 
 ### User Interface
-- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Responsive Design**: Works on desktop, tablet and mobile
 - **Modern UI**: Beautiful gradients and smooth animations
-- **Accessibility**: Keyboard navigation and screen reader support
-- **Child-Friendly**: Bright colours and engaging emojis
+- **Child-Friendly**: Comforting colours and engaging emojis
 
 ### Database Integration
 - **Firebase Firestore**: Real-time database for stories
-- **Automatic Saving**: Generated stories are saved with metadata
 - **Keyword Tracking**: Stories are tagged with their keywords
-- **Timestamp Tracking**: All stories include creation timestamps
 
 ## Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `GEMINI_API_KEY` | Google Gemini API key | Yes |
-| `SECRET_KEY` | Flask secret key | No (defaults to placeholder) |
+| Variable | Description |
+|----------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `SECRET_KEY` | Flask secret key |
+| `FIREBASE_KEY_PATH` | Path to Firebase service account key file |
+| `TTS_KEY_PATH` | Path to Google Cloud TTS service account key file |
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Firebase Connection Error**
-   - Ensure `privatekey.json` is in the root directory
+   - Ensure `firebase-key.json` is in the root directory
    - Verify Firebase project settings
    - Check Firestore rules
 
@@ -158,6 +188,7 @@ bedtime-story-generator/
    - Ensure API is enabled in Google Cloud Console
 
 3. **TTS Generation Fails**
+   - Ensure `tts-key.json` is in the root directory
    - Verify Google Cloud TTS API is enabled
    - Check authentication credentials
    - Ensure sufficient quota
@@ -175,14 +206,6 @@ bedtime-story-generator/
 4. Test thoroughly
 5. Submit a pull request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Support
 
 For support, please open an issue on GitHub or contact the development team.
-
----
-
-Made with ❤️ for sweet dreams and magical bedtime moments. 
